@@ -34,6 +34,11 @@ func NewCurve(xyz XYZer) Curve {
 // Plot implements gonum's Plotter interface
 func (c Curve) Plot(canvas draw.Canvas, plt *plot.Plot) {
 	const FOVAngle, nearestPoint = 90., 0.1
+	plt.X.Min, plt.Y.Min, _ = c.Min()
+	plt.X.Max, plt.Y.Max, _ = c.Max()
+
+	trX, trY := plt.Transforms(&canvas)
+
 	scene := ln.Scene{}
 	scene.Add(c)
 	// calculate viewing limits
@@ -53,10 +58,7 @@ func (c Curve) Plot(canvas draw.Canvas, plt *plot.Plot) {
 
 	canvas.SetColor(c.Color)
 	// plt lims hack
-	plt.X.Min, plt.Y.Min, _ = c.Min()
-	plt.X.Max, plt.Y.Max, _ = c.Max()
 
-	trX, trY := plt.Transforms(&canvas)
 	for _, path := range trfmPaths {
 		var p vg.Path
 		for i := range path[:len(path)-2] {
@@ -74,16 +76,12 @@ func (c Curve) Plot(canvas draw.Canvas, plt *plot.Plot) {
 func Plot(filename string, xyz XYZer) {
 	scene := ln.Scene{}
 	c := NewCurve(xyz)
+	// calculate viewing limits
 	xl, yl, zl := c.Min()
 	xg, yg, zg := c.Max()
-	maxAbs := xg
-	if yg > xg {
-		maxAbs = yg
-		if zg > maxAbs {
-			maxAbs = zg
-		}
-	}
+	maxAbs := math.Max(xg, math.Max(yg, zg))
 	distance := math.Sqrt(math.Pow(xg-xl, 2) + math.Pow(yg-yl, 2) + math.Pow(zg-zl, 2))
+
 	scene.Add(c)
 	width := 750.0
 	height := 750.0
