@@ -58,6 +58,10 @@ func (c Curve) Plot(canvas draw.Canvas, plt *plot.Plot) {
 		size.X.Points(), size.Y.Points(), FOVAngle, nearestPoint, distance, 0.01)
 
 	canvas.SetColor(c.Color)
+	// plt lims hack
+	plt.X.Min, plt.Y.Min, _ = c.Min()
+	plt.X.Max, plt.Y.Max, _ = c.Max()
+
 	trX, trY := plt.Transforms(&canvas)
 	for _, path := range trfmPaths {
 		var p vg.Path
@@ -67,14 +71,14 @@ func (c Curve) Plot(canvas draw.Canvas, plt *plot.Plot) {
 			p.Move(vg.Point{X: x1, Y: y1})
 			p.Line(vg.Point{X: x2, Y: y2})
 		}
-		canvas.Fill(p)
 		p.Close()
+		canvas.Fill(p)
 	}
 }
 
-func Plot(filename string, x, y, z []float64) {
+func Plot(filename string, xyz XYZer) {
 	scene := ln.Scene{}
-	c := NewCurve(XYZerFromSlices(x, y, z))
+	c := NewCurve(xyz)
 	xl, yl, zl := c.Min()
 	xg, yg, zg := c.Max()
 	maxAbs := xg
