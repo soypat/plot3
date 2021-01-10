@@ -19,6 +19,7 @@ func (xyz XYZs) Len() int {
 	return len(xyz)
 }
 
+// XYZ returns a point in space (3 element tuple)
 func (xyz XYZs) XYZ(i int) (float64, float64, float64) {
 	return xyz[i].X, xyz[i].Y, xyz[i].Z
 }
@@ -32,6 +33,8 @@ func CopyXYZs(data XYZer) XYZs {
 	return cpy
 }
 
+// XYZerFromSlices generates XYZer interface from a set of
+// points (x[i] corresponds to y[i] and z[i])
 func XYZerFromSlices(x, y, z []float64) XYZer {
 
 	if len(x) != len(y) || len(y) != len(z) {

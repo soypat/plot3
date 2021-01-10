@@ -94,9 +94,14 @@ func Plot(filename string, xyz XYZer) {
 	paths.WriteToPNG(filename, width, height)
 }
 
+// Min returns minimum x, y and z values of a Curve.
+//
+// The numbers returned do NOT define a point of the Curve.
 func (c Curve) Min() (float64, float64, float64) {
 	return c.minXYZ.X, c.minXYZ.Y, c.minXYZ.Z
 }
+
+// Max Like Min but maximum values
 func (c Curve) Max() (float64, float64, float64) {
 	return c.maxXYZ.X, c.maxXYZ.Y, c.maxXYZ.Z
 }

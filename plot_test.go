@@ -3,20 +3,25 @@ package plot3_test
 import (
 	"image/color"
 	"math"
-	"plot3"
 	"testing"
 
+	"github.com/soypat/plot3"
 	"gonum.org/v1/plot"
 	"gonum.org/v1/plot/vg"
 )
 
+// XYZFunc defines a parametrized 3D curve
 type XYZFunc struct {
 	X, Y, Z    func(in float64) float64
 	start, end float64
 	steps      int
 }
 
+// Len Returns amount of sampled points.
+// part of XYZer interface implementation
 func (f XYZFunc) Len() int { return f.steps }
+
+// XYZ returns a point in space (3 element tuple)
 func (f XYZFunc) XYZ(i int) (float64, float64, float64) {
 	if i >= f.steps {
 		panic("out of bounds")
