@@ -1,4 +1,5 @@
 ![](https://goreportcard.com/badge/github.com/soypat/plot3)
+[![go.dev reference](https://pkg.go.dev/badge/github.com/soypat/plot3)](https://pkg.go.dev/github.com/soypat/plot3)
 
 # plot3
 
