@@ -1,3 +1,5 @@
+![](https://goreportcard.com/badge/github.com/soypat/plot3)
+
 # plot3
 
 ![plotspiral](./plotspiral.png)
