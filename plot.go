@@ -18,7 +18,7 @@ type Curve struct {
 	maxXYZ struct{ X, Y, Z float64 }
 }
 
-// Creates new curve ready to graph from XYZer
+// NewCurve Creates new curve ready to graph from XYZer
 func NewCurve(xyz XYZer) Curve {
 	c := Curve{}
 	c.minXYZ.X, c.minXYZ.Y, c.minXYZ.Z = xyz.XYZ(0)
@@ -106,16 +106,24 @@ func (c Curve) Max() (float64, float64, float64) {
 	return c.maxXYZ.X, c.maxXYZ.Y, c.maxXYZ.Z
 }
 
-// ln.Shape interface implementation
+// BoundingBox ln.Shape interface implementation
 func (c Curve) BoundingBox() ln.Box {
 	return ln.Box{Min: ln.Vector(c.maxXYZ), Max: ln.Vector(c.maxXYZ)}
 }
-func (c Curve) Compile()                         {}
-func (c Curve) Contains(ln.Vector, float64) bool { return false }
-func (c Curve) Intersect(ln.Ray) ln.Hit          { return ln.NoHit }
-func (c Curve) Paths() ln.Paths                  { return ln.Paths{ln.Path(c.XYZs)} }
 
-// update min/max values of curve to then save compute time on
+// Compile ln.Shape interface implementation
+func (c Curve) Compile() {}
+
+// Contains ln.Shape interface implementation
+func (c Curve) Contains(ln.Vector, float64) bool { return false }
+
+// Intersect ln.Shape interface implementation
+func (c Curve) Intersect(ln.Ray) ln.Hit { return ln.NoHit }
+
+// Paths ln.Shape interface implementation
+func (c Curve) Paths() ln.Paths { return ln.Paths{ln.Path(c.XYZs)} }
+
+// updateBounds min/max values of curve to then save compute time on
 // visualization calculations
 func updateBounds(c *Curve, x, y, z float64) {
 	c.minXYZ.X, c.maxXYZ.X = math.Min(c.minXYZ.X, x), math.Max(c.maxXYZ.X, x)
