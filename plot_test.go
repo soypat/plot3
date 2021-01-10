@@ -56,23 +56,3 @@ func TestPlotter(t *testing.T) {
 		panic(err)
 	}
 }
-
-func newFromFunc(x []float64, f func(float64) float64) []float64 {
-	y := make([]float64, len(x))
-	for i := range y {
-		y[i] = f(x[i])
-	}
-	return y
-}
-
-func linspace(start, end float64, samples int) []float64 {
-	if samples <= 0 {
-		panic("linspace: sampling 0 or negative")
-	}
-	dx := (end - start) / float64(samples)
-	sli := make([]float64, samples)
-	for i := range sli {
-		sli[i] = dx*float64(i) + start
-	}
-	return sli
-}

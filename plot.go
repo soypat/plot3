@@ -10,6 +10,7 @@ import (
 	"gonum.org/v1/plot/vg/draw"
 )
 
+// Curve defines a 3D Curve. Points are ordered
 type Curve struct {
 	XYZs
 	color.Color
@@ -17,15 +18,7 @@ type Curve struct {
 	maxXYZ struct{ X, Y, Z float64 }
 }
 
-// ln.Shape interface implementation
-func (c Curve) BoundingBox() ln.Box {
-	return ln.Box{Min: ln.Vector(c.maxXYZ), Max: ln.Vector(c.maxXYZ)}
-}
-func (c Curve) Compile()                         {}
-func (c Curve) Contains(ln.Vector, float64) bool { return false }
-func (c Curve) Intersect(ln.Ray) ln.Hit          { return ln.NoHit }
-func (c Curve) Paths() ln.Paths                  { return ln.Paths{ln.Path(c.XYZs)} }
-
+// Creates new curve ready to graph from XYZer
 func NewCurve(xyz XYZer) Curve {
 	c := Curve{}
 	c.minXYZ.X, c.minXYZ.Y, c.minXYZ.Z = xyz.XYZ(0)
@@ -38,6 +31,7 @@ func NewCurve(xyz XYZer) Curve {
 	return c
 }
 
+// Plot implements gonum's Plotter interface
 func (c Curve) Plot(canvas draw.Canvas, plt *plot.Plot) {
 	const FOVAngle, nearestPoint = 90., 0.1
 	scene := ln.Scene{}
@@ -76,6 +70,7 @@ func (c Curve) Plot(canvas draw.Canvas, plt *plot.Plot) {
 	}
 }
 
+// Plot does a 3D lineplot using fogleman/ln library
 func Plot(filename string, xyz XYZer) {
 	scene := ln.Scene{}
 	c := NewCurve(xyz)
@@ -108,19 +103,17 @@ func (c Curve) Max() (float64, float64, float64) {
 	return c.maxXYZ.X, c.maxXYZ.Y, c.maxXYZ.Z
 }
 
-func minmax(x []float64) (float64, float64) {
-	min, max := math.Inf(1), math.Inf(-1)
-	for _, v := range x {
-		if min > v {
-			min = v
-		}
-		if max < v {
-			max = v
-		}
-	}
-	return min, max
+// ln.Shape interface implementation
+func (c Curve) BoundingBox() ln.Box {
+	return ln.Box{Min: ln.Vector(c.maxXYZ), Max: ln.Vector(c.maxXYZ)}
 }
+func (c Curve) Compile()                         {}
+func (c Curve) Contains(ln.Vector, float64) bool { return false }
+func (c Curve) Intersect(ln.Ray) ln.Hit          { return ln.NoHit }
+func (c Curve) Paths() ln.Paths                  { return ln.Paths{ln.Path(c.XYZs)} }
 
+// update min/max values of curve to then save compute time on
+// visualization calculations
 func updateBounds(c *Curve, x, y, z float64) {
 	c.minXYZ.X, c.maxXYZ.X = math.Min(c.minXYZ.X, x), math.Max(c.maxXYZ.X, x)
 	c.minXYZ.Y, c.maxXYZ.Y = math.Min(c.minXYZ.Y, y), math.Max(c.maxXYZ.Y, y)
