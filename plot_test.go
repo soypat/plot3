@@ -1,7 +1,6 @@
 package plot3_test
 
 import (
-	"image/color"
 	"math"
 	"testing"
 
@@ -51,11 +50,11 @@ func TestPlotter(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	p.Title.Text = "LogSpiral using gonum's Plotter interface"
-	p.X.Label.Text = "X (does not work yet)"
+	p.Title.Text = "plot3 using Gonum Plotter Interface (WIP)"
+	p.X.Label.Text = "X "
 	p.Y.Label.Text = "Y"
 	c := plot3.NewCurve(logSpiral)
-	c.Color = color.RGBA{R: 196, B: 128, A: 255}
+	// c.Color = color.RGBA{R: 196, B: 128, A: 255}
 	p.Add(c)
 	if err := p.Save(4*vg.Inch, 4*vg.Inch, "logspiral.png"); err != nil {
 		panic(err)
