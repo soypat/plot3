@@ -41,10 +41,6 @@ var logSpiral = XYZFunc{
 	Z: func(in float64) float64 { return in },
 }
 
-func TestPlot(t *testing.T) {
-	plot3.Plot("plotspiral.png", logSpiral)
-}
-
 func TestPlotter(t *testing.T) {
 	p, err := plot.New()
 	if err != nil {
